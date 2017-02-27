@@ -15,7 +15,7 @@ function js(url) {
   return '<script src="' + url + '.js"></script>\n';
 }
 
-const injection = "";
+let injection = "";
 stylesheets.forEach(stylesheet => injection += css(server + stylesheet));
         scripts.forEach(script => injection +=  js(server + script));
 
