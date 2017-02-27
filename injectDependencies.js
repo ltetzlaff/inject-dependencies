@@ -32,13 +32,16 @@ let injection = "";
 stylesheets.forEach(stylesheet => injection += css(server + stylesheet));
         scripts.forEach(script => injection +=  js(server + script));
 
-folders 
-fs.readdir(".", (err, files) => {
-  files.filter(file => file.endsWith(".html")).forEach(file => {
-    sed("-i", new RegExp(find), find + "\n" + injection, file);
+folders.forEach(folder => {
+  fs.readdir(folder, (err, files) => {
+    files.filter(file => file.endsWith(".html")).forEach(file => {
+      //console.log(file);
+      sed("-i", new RegExp(find), find + "\n" + injection, folder + file);
+      sed("-i", /<script src="(|\.\.\/)common.js"><\/script>/, "", folder + file);
 
-    // Defer inline scripts
-    sed("-i", /<script>[\r\n]/, "<script type='later'>\n", file);
-    fs.appendFile(file, loadInlineScripts, "utf8");
+      // Defer inline scripts
+      sed("-i", /<script>/, "<script type='later'>\n", folder + file);
+      fs.appendFile(folder + file, loadInlineScripts, "utf8");
+    });
   });
 });
